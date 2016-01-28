@@ -2,58 +2,33 @@
 
 import UIKit
 
-/*
-func myImageAvg(image: RGBAImage) -> (red: Int, green: Int, blue: Int, alpha: Int) {
-    var myTotR = 0
-    var myTotG = 0
-    var myTotB = 0
-    var myTotA = 0
-    
-    for y in 0..<image.height {
-        for x in 0..<image.width {
-            let index = y*image.width + x
-            let pixel = image.pixels[index]
-            myTotR += Int(pixel.red)
-            myTotG += Int(pixel.green)
-            myTotB += Int(pixel.blue)
-            myTotA += Int(pixel.alpha)
-        }
-    }
-    
-    let myTot = image.width * image.height
-    return (myTotR/myTot, myTotG/myTot, myTotB/myTot, myTotA/myTot)
-}
-*/
-
-
-func myImageFilter(image: RGBAImage) -> UIImage {
-    var pixel = image.pixels[0]
-    print(Int(pixel.red), Int(pixel.green), Int(pixel.blue))
-
-    /*
-    for y in 0..<image.height {
-        for x in 0..<image.width {
-            let index = y*image.width + x
-            var pixel = image.pixels[index]
-            let bias = 1
-            pixel.red = min(max(Int(pixel.red)+bias, 0), 255)
-            pixel.green = min(max(Int(pixel.green)+bias, 0), 255)
-            pixel.blue = max(Int(pixel.green)+bias, 0)
-
-            image.pixels[index] = pixel
-        }
-    }
-    */
-    
-    return image.toUIImage()!
-}
-
-
 let image = UIImage(named: "sample")!
-let myImage = RGBAImage(image: image)!
 
-//let (myAvgR, myAvgG, myAvgB, myAvgA) = myImageAvg(myImage)
-//let (myAvgR, myAvgG, myAvgB, myAvgA) = (118, 98, 83, 255)
-//let myFiltered = myImageFilter(myImage)
+let rgba1 = RGBAImage(image: image)!
+let filterer1 = Filterer(intensity: 2, mask: 0b0010)
+let filtered1 = filterer1.filter(rgba1)
+filtered1.toUIImage()
 
+let rgba2 = RGBAImage(image: image)!
+let filterer21 = Filterer(intensity: 2, mask: 0b1000)
+let filterer22 = Filterer(intensity: 2, mask: 0b0100)
+let filterer23 = Filterer(intensity: 2, mask: 0b0010)
+//let processor2 = ImageProcessor(filters: filterer21)
+//let processor2 = ImageProcessor(filters: filterer21, filterer22)
+let processor2 = ImageProcessor(filters: filterer21, filterer22, filterer23)
+let processed2 = processor2.process(rgba2)
+processed2.toUIImage()
 
+let rgba3 = RGBAImage(image: image)!
+let filterer31 = Filterer(contrast: 0.75)
+let filtered3 = filterer31.filter(rgba3)
+filtered3.toUIImage()
+
+let rgba4 = RGBAImage(image: image)!
+let processor4 = ImageProcessor()
+let processed4 = processor4.predefined(rgba4, filter: "boost-red")
+//let processed4 = processor4.predefined(rgba4, filter: "boost-green")
+//let processed4 = processor4.predefined(rgba4, filter: "boost-blue")
+//let processed4 = processor4.predefined(rgba4, filter: "darken")
+//let processed4 = processor4.predefined(rgba4, filter: "brighten")
+processed4.toUIImage()
