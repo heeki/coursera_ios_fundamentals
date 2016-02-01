@@ -10,7 +10,6 @@ import UIKit
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    var originalImage: UIImage?
     var filteredImage: UIImage?
     var imageProcessor: ImageProcessor?
     var isFiltered: Bool = false
@@ -22,6 +21,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet var filterButton: UIButton!
     @IBOutlet var compareButton: UIButton!
     
+    @IBOutlet var filterRed: UIButton!
+    @IBOutlet var filterGreen: UIButton!
+    @IBOutlet var filterBlue: UIButton!
+    @IBOutlet var filterDarken: UIButton!
+    @IBOutlet var filterBrighten: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         secondaryMenu.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
@@ -32,19 +37,30 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         let lpgr = UILongPressGestureRecognizer(target: self, action: "longPressed:")
         lpgr.minimumPressDuration = 0.1
-        imageView.addGestureRecognizer(lpgr)
-        imageView.userInteractionEnabled = true
+        secondImageView.addGestureRecognizer(lpgr)
+        secondImageView.userInteractionEnabled = true
+        
+        filterRed.setImage(getFilterIcon("boost-red"), forState: .Normal)
+        filterGreen.setImage(getFilterIcon("boost-green"), forState: .Normal)
+        filterBlue.setImage(getFilterIcon("boost-blue"), forState: .Normal)
+        filterDarken.setImage(getFilterIcon("darken"), forState: .Normal)
+        filterBrighten.setImage(getFilterIcon("brighten"), forState: .Normal)
     }
     
     func longPressed(recognizer: UILongPressGestureRecognizer) {
-        if (originalImage != nil && filteredImage != nil) {
-            if recognizer.state == UIGestureRecognizerState.Began {
-                imageView.image = originalImage
-            }
-            if recognizer.state == UIGestureRecognizerState.Ended {
-                imageView.image = filteredImage
-            }
+        if recognizer.state == UIGestureRecognizerState.Began {
+            secondImageView.alpha = 0
         }
+        if recognizer.state == UIGestureRecognizerState.Ended {
+            secondImageView.alpha = 1
+        }
+    }
+    
+    func getFilterIcon(apply: String) -> UIImage {
+        let filterIcon = UIImage(named: "icon_filter_small")!
+        let rgba = RGBAImage(image: filterIcon)!
+        let filtered = imageProcessor!.predefined(rgba, filter: apply)
+        return filtered.toUIImage()!
     }
 
     // MARK: Share
@@ -115,9 +131,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let bottomConstraint = secondaryMenu.bottomAnchor.constraintEqualToAnchor(bottomMenu.topAnchor)
         let leftConstraint = secondaryMenu.leftAnchor.constraintEqualToAnchor(view.leftAnchor)
         let rightConstraint = secondaryMenu.rightAnchor.constraintEqualToAnchor(view.rightAnchor)
-        
         let heightConstraint = secondaryMenu.heightAnchor.constraintEqualToConstant(44)
-        
         NSLayoutConstraint.activateConstraints([bottomConstraint, leftConstraint, rightConstraint, heightConstraint])
         
         view.layoutIfNeeded()
@@ -139,17 +153,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func filterImage(apply: String) {
-        let current: UIImage
-        if originalImage == nil {
-            originalImage = imageView.image!
-            current = originalImage!
-        } else {
-            current = filteredImage!
-        }
+        let current = secondImageView.image!
         let rgba = RGBAImage(image: current)!
         let filtered = imageProcessor!.predefined(rgba, filter: apply)
         filteredImage = filtered.toUIImage()
-        imageView.image = filteredImage
+        secondImageView.image = filteredImage
+        secondImageView.alpha = 1
         isFiltered = true
         compareButton.enabled = true
     }
@@ -176,20 +185,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @IBAction func onCompare(sender: UIButton) {
         if (isFiltered) {
-            if originalImage != nil {
-                // only something to compare if a filter was applied
-                imageView.image = originalImage
+            UIView.animateWithDuration(0.4) {
+                self.secondImageView.alpha = 0
             }
             isFiltered = false
         } else {
-            if filteredImage != nil {
-                // only something to compare if a filter was applied
-                imageView.image = filteredImage
+            UIView.animateWithDuration(0.4) {
+                self.secondImageView.alpha = 1
             }
             isFiltered = true
         }
-    }
-    
+    }    
 
 }
 
