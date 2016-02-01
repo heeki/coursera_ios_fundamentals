@@ -13,6 +13,8 @@
 		4DC1999F1BB201E100AA75E7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4DC1999E1BB201E100AA75E7 /* Assets.xcassets */; };
 		4DC199A21BB201E100AA75E7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DC199A01BB201E100AA75E7 /* LaunchScreen.storyboard */; };
 		4DC199AA1BB2049F00AA75E7 /* RGBAImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC199A91BB2049F00AA75E7 /* RGBAImage.swift */; };
+		546DC1511C5EF43B00DAEA3C /* Filterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546DC1501C5EF43B00DAEA3C /* Filterer.swift */; };
+		546DC1531C5EF46F00DAEA3C /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546DC1521C5EF46F00DAEA3C /* ImageProcessor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		4DC199A11BB201E100AA75E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4DC199A31BB201E100AA75E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4DC199A91BB2049F00AA75E7 /* RGBAImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBAImage.swift; sourceTree = "<group>"; };
+		546DC1501C5EF43B00DAEA3C /* Filterer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filterer.swift; sourceTree = "<group>"; };
+		546DC1521C5EF46F00DAEA3C /* ImageProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +67,8 @@
 				4DC1999E1BB201E100AA75E7 /* Assets.xcassets */,
 				4DC199A01BB201E100AA75E7 /* LaunchScreen.storyboard */,
 				4DC199A31BB201E100AA75E7 /* Info.plist */,
+				546DC1501C5EF43B00DAEA3C /* Filterer.swift */,
+				546DC1521C5EF46F00DAEA3C /* ImageProcessor.swift */,
 			);
 			path = Filterer;
 			sourceTree = "<group>";
@@ -139,6 +145,8 @@
 			files = (
 				4DC1999A1BB201E100AA75E7 /* ViewController.swift in Sources */,
 				4DC199AA1BB2049F00AA75E7 /* RGBAImage.swift in Sources */,
+				546DC1531C5EF46F00DAEA3C /* ImageProcessor.swift in Sources */,
+				546DC1511C5EF43B00DAEA3C /* Filterer.swift in Sources */,
 				4DC199981BB201E100AA75E7 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,19 +10,41 @@ import UIKit
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    var originalImage: UIImage?
     var filteredImage: UIImage?
+    var imageProcessor: ImageProcessor?
+    var isFiltered: Bool = false
     
     @IBOutlet var imageView: UIImageView!
-    
+    @IBOutlet var secondImageView: UIImageView!
     @IBOutlet var secondaryMenu: UIView!
     @IBOutlet var bottomMenu: UIView!
-    
     @IBOutlet var filterButton: UIButton!
+    @IBOutlet var compareButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         secondaryMenu.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
         secondaryMenu.translatesAutoresizingMaskIntoConstraints = false
+        
+        imageProcessor = ImageProcessor()
+        compareButton.enabled = false
+        
+        let lpgr = UILongPressGestureRecognizer(target: self, action: "longPressed:")
+        lpgr.minimumPressDuration = 0.1
+        imageView.addGestureRecognizer(lpgr)
+        imageView.userInteractionEnabled = true
+    }
+    
+    func longPressed(recognizer: UILongPressGestureRecognizer) {
+        if (originalImage != nil && filteredImage != nil) {
+            if recognizer.state == UIGestureRecognizerState.Began {
+                imageView.image = originalImage
+            }
+            if recognizer.state == UIGestureRecognizerState.Ended {
+                imageView.image = filteredImage
+            }
+        }
     }
 
     // MARK: Share
@@ -115,6 +137,59 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 }
         }
     }
+    
+    func filterImage(apply: String) {
+        let current: UIImage
+        if originalImage == nil {
+            originalImage = imageView.image!
+            current = originalImage!
+        } else {
+            current = filteredImage!
+        }
+        let rgba = RGBAImage(image: current)!
+        let filtered = imageProcessor!.predefined(rgba, filter: apply)
+        filteredImage = filtered.toUIImage()
+        imageView.image = filteredImage
+        isFiltered = true
+        compareButton.enabled = true
+    }
+    
+    @IBAction func onBoostRed(sender: AnyObject) {
+        filterImage("boost-red")
+    }
+    
+    @IBAction func onBoostGreen(sender: AnyObject) {
+        filterImage("boost-green")
+    }
+
+    @IBAction func onBoostBlue(sender: AnyObject) {
+        filterImage("boost-blue")
+    }
+    
+    @IBAction func onDarken(sender: AnyObject) {
+        filterImage("darken")
+    }
+    
+    @IBAction func onBrighten(sender: AnyObject) {
+        filterImage("brighten")
+    }
+    
+    @IBAction func onCompare(sender: UIButton) {
+        if (isFiltered) {
+            if originalImage != nil {
+                // only something to compare if a filter was applied
+                imageView.image = originalImage
+            }
+            isFiltered = false
+        } else {
+            if filteredImage != nil {
+                // only something to compare if a filter was applied
+                imageView.image = filteredImage
+            }
+            isFiltered = true
+        }
+    }
+    
 
 }
 
